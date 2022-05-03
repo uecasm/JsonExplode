@@ -1,0 +1,27 @@
+﻿@page "/"
+@using System.Text.Json
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<button @onclick="ExplodeMe">Explode</button>
+
+@code {
+
+    private async Task ExplodeMe()
+    {
+        var options = new JsonSerializerOptions()
+        {
+            Converters = { new ExplodingConverter() }
+        };
+
+        var response = new StringContent(@"{ ""Value"": ""test"" }", null, "application/json");
+        var data = await response.ReadFromJsonAsync<ExplodingData>(options);
+
+        Console.WriteLine($"Survived to read value \"{data?.Value}\".");
+    }
+
+}
